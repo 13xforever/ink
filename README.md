@@ -1,6 +1,6 @@
 # ink
 
-[![CI Status](http://img.shields.io/travis/inkle/ink.svg?style=flat)](https://travis-ci.org/inkle/ink)
+[![Unofficial Nightlies Build Status](https://travis-ci.com/13xforever/ink.svg?branch=unofficial-nightlies)](https://travis-ci.com/13xforever/ink)
 
 [Ink](http://www.inklestudios.com/ink) is [inkle](http://www.inklestudios.com/)'s scripting language for writing interactive narrative, both for text-centric games as well as more graphical games that contain highly branching stories. It's designed to be easy to learn, but with powerful enough features to allow an advanced level of structuring.
 
