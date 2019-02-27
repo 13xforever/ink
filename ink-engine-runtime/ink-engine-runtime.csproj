@@ -11,14 +11,17 @@
     <Company>inkle Ltd</Company>
     <Authors>InkleStudios</Authors>
     <Copyright>inkle Ltd</Copyright>
-    <RepositoryUrl>https://github.com/inkle/ink</RepositoryUrl>
+    <RepositoryUrl>https://github.com/13xforever/ink</RepositoryUrl>
     <PackageProjectUrl>https://www.inklestudios.com/ink/</PackageProjectUrl>
-    <VersionPrefix>0.9.0</VersionPrefix>
-    <PackageIconUrl>https://avatars2.githubusercontent.com/u/1987090</PackageIconUrl>
-    <Description>Runtime engine for the ink scripting language</Description>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <PackageIconUrl>https://raw.githubusercontent.com/13xforever/ink/icon/inkle_bw.png</PackageIconUrl>
+    <Description>Runtime engine for the ink scripting language.
+
+This is an UNOFFICIAL nightly build package pushed directly from the latest master. Expect no support.
+</Description>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageId>Inkle.Ink.Engine</PackageId>
+    <PackageId>Ink.Engine.Runtime-Unofficial</PackageId>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
