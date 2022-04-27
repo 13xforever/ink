@@ -2873,6 +2873,23 @@ LIST list = a, b
             Assert.AreEqual ("a, b\n", story.ContinueMaximally ());
         }
 
+
+                [Test ()]
+        public void TestContainsEmptyListAlwaysFalse ()
+        {
+            var storyStr =
+                @"
+LIST list = (a), b
+{list ? ()}
+{() ? ()}
+{() ? list}
+";
+            var story = CompileString (storyStr);
+
+            Assert.AreEqual ("false\nfalse\nfalse\n", story.ContinueMaximally ());
+        }
+
+
         [Test ()]
         public void TestEmptyListOriginAfterAssignment ()
         {
@@ -3109,6 +3126,30 @@ Unreachable
 
             var story = CompileString (storyStr);
             Assert.AreEqual ("8\n", story.ContinueMaximally ());
+        }
+
+
+        [Test ()]
+        public void TestTunnelOnwardsToVariableDivertTarget ()
+        {
+            var storyStr =
+@"
+-> outer ->
+
+== outer
+This is outer
+-> cut_to(-> the_esc)
+
+=== cut_to(-> escape) 
+    ->-> escape
+    
+== the_esc
+This is the_esc
+-> END
+";
+
+            var story = CompileString (storyStr);
+            Assert.AreEqual ("This is outer\nThis is the_esc\n", story.ContinueMaximally ());
         }
 
 
