@@ -358,7 +358,7 @@ The very loose structure means writers can get on and write, branching and rejoi
 
 You absolutely can use diverts to create looped content, and **ink** has several features to exploit this, including ways to make the content vary itself, and ways to control how often options can be chosen.
 
-See the sections on Varying Text and [Conditional Choices](#conditional-choices) for more information.
+See the sections on [Varying Text](#8-variable-text) and [Conditional Choices](#conditional-choices) for more information.
 
 Oh, and the following is legal and not a great idea:
 
@@ -1289,7 +1289,7 @@ The value of a variable can be printed as content using an inline syntax similar
 
 	My name is Jean Passepartout, but my friend's call me {friendly_name_of_player}. I'm {age} years old.
 
-This can be useful in debugging. For more complex printing based on logic and variables, see the section on functions.
+This can be useful in debugging. For more complex printing based on logic and variables, see the section on [functions](#5-functions).
 
 ### Evaluating strings
 
@@ -2565,6 +2565,17 @@ We can also negate it, with `hasnt` or `!?` (not `?`). Note this starts to get a
 
 does not mean neither Adams nor Bernard is present, only that they are not *both* present (and arguing).
 
+#### Warning: no lists contain the empty list
+
+Note that the test 
+
+	SomeList ? ()
+
+will always return false, regardless of whether `SomeList` itself is empty. In practice this is the most useful default, as you'll often want to do tests like:
+
+	SilverWeapons ? best_weapon_to_use 
+	
+to fail if the player is empty-handed.
 
 #### Example: basic knowledge tracking
 

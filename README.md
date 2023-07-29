@@ -81,14 +81,9 @@ The intention is the following:
  * Create a text file called `myStory.ink`, containing the text `Hello, world!`.
  * On the command line, run the following:
 
-    **Mac:** `./inklecate -p myStory.ink`
+    **Mac or Linux:** `./inklecate -p myStory.ink`
     
     **Windows:** `inklecate.exe -p myStory.ink`
-    
-    **Linux:** `mono inklecate.exe -p myStory.ink`
-    
-    * To run on Linux, you need the Mono runtime and the Mono System.Core library (for CLI 4.0). If you have access to the debian repository, you can install these using: <br>
-    `sudo apt install mono-complete`
 
     The `-p` option uses play mode so that you can see the result immediately. If you want to get a compiled `.json` file, just remove the `-p` option from the examples above.
     
@@ -131,7 +126,7 @@ To compile the ink, either export from Inky (File -> Export to JSON). Or if you'
 ## Build Requirements
 
 **All Environments:**
- * [.NET Core SDK 3.1](https://dotnet.microsoft.com/download) or newer
+ * [.NET SDK 6.0](https://dotnet.microsoft.com/download) or newer
  * Optionally [Visual Studio Code](https://code.visualstudio.com/)
 
 
@@ -156,11 +151,11 @@ To compile the ink, either export from Inky (File -> Export to JSON). Or if you'
 1. `cd` to the project you want to build (e.g., `cd inklecate`)
 2. Build using dotnet: `dotnet build -c Release`
 3. To run console apps: `dotnet run -c Release`
-    * To produce self-contained executable: `dotnet publish -r win-x64 -c Release --self-contained false`
+    * To produce self-contained executable: `dotnet publish -r win-x64 -c Release --self-contained`
     * [Recommended RIDs](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) for the platform (`-r`) are: `win-x64`, `linux-x64`, and `osx-x64`
 
 
-To run the binaries, you need to install [.NET Core Runtime 2.2]((https://dotnet.microsoft.com/download)) or newer (included in SDK).
+To run the binaries, you need to install [.NET Runtime 6.0]((https://dotnet.microsoft.com/download)) or newer (included in SDK).
 
 ## Need help?
 
