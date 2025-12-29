@@ -118,12 +118,12 @@ If no other flow instructions are given, once made, the choice will flow into th
 
 This produces the following game:
 
-	Hello world
+	Hello world!
 	1: Hello back!
 
 	> 1
 	Hello back!
-	Nice to hear from you.
+	Nice to hear from you!
 
 By default, the text of a choice appears again, in the output.
 
@@ -137,11 +137,11 @@ Some games separate the text of a choice from its outcome. In **ink**, if the ch
 
 produces
 
-	Hello world
+	Hello world!
 	1: Hello back!
 
 	> 1
-	Nice to hear from you.
+	Nice to hear from you!
 
 #### Advanced: mixing choice and output text
 
@@ -153,11 +153,11 @@ The square brackets in fact divide up the option content. What's before is print
 
 produces:
 
-	Hello world
+	Hello world!
 	1: Hello back!
 	> 1
 	Hello right back to you!
-	Nice to hear from you.
+	Nice to hear from you!
 
 This is most useful when writing dialogue choices:
 
@@ -168,7 +168,7 @@ This is most useful when writing dialogue choices:
 produces:
 
 	"What's that?" my master asked.
-	1. "I am somewhat tired."
+	1: "I am somewhat tired."
 	> 1
 	"I am somewhat tired," I repeated.
 	"Really," he responded. "How deleterious."
@@ -1220,7 +1220,7 @@ The following is valid, and frequently useful.
 	*	"How did you do at the crossword, Monsieur?"[] I asked.
 		-> quitewell
 	*	I said nothing[] and neither did my Master.
-	-	We feel into companionable silence once more.
+	-	We fell into companionable silence once more.
 
 Note the level 2 gather point directly below the first option: there's nothing to gather here, really, but it gives us a handy place to divert the second option to.
 
@@ -1287,7 +1287,7 @@ The value of a variable can be printed as content using an inline syntax similar
 	VAR friendly_name_of_player = "Jackie"
 	VAR age = 23
 
-	My name is Jean Passepartout, but my friend's call me {friendly_name_of_player}. I'm {age} years old.
+	My name is Jean Passepartout, but my friends call me {friendly_name_of_player}. I'm {age} years old.
 
 This can be useful in debugging. For more complex printing based on logic and variables, see the section on [functions](#5-functions).
 
@@ -1878,7 +1878,8 @@ And sometimes the numbers are useful in other ways:
 	VAR suitcase_location = HALLWAY
 
 	=== report_progress ===
-	{  secret_agent_location == suitcase_location:
+	{
+        -  secret_agent_location == suitcase_location:
 		The secret agent grabs the suitcase!
 		~ suitcase_location = HELD_BY_AGENT
 
@@ -2943,7 +2944,7 @@ We can model devices with multiple states. Back to the kettle again...
 	LIST OnOff = on, off
 	LIST HotCold = cold, warm, hot
 
-	VAR kettleState = off, cold
+	VAR kettleState = (off, cold) // we need brackets because it's a proper, multi-valued list now
 
 	=== function turnOnKettle() ===
 	{ kettleState ? hot:
