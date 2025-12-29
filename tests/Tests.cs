@@ -55,9 +55,9 @@ VAR global_var = 5
     -> END
 ", testingErrors: true);
 
-            Assert.AreEqual(2, _errorMessages.Count);
-            Assert.IsTrue(HadError("name has already been used for a function"));
-            Assert.IsTrue(HadError("name has already been used for a var"));
+            Assert.That(_errorMessages.Count, Is.EqualTo(2));
+            Assert.That(HadError("name has already been used for a function"), Is.True);
+            Assert.That(HadError("name has already been used for a var"), Is.True);
         }
 
         [Test()]
@@ -86,7 +86,7 @@ Nothing
 { 2 * (5-1) }
 ");
 
-            Assert.AreEqual("36\n2\n3\n2\n2"+System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator+"3333333\n8\n8\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("36\n2\n3\n2\n2" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "3333333\n8\n8\n"));
         }
 
         [Test()]
@@ -97,7 +97,7 @@ VAR x = ""Hello world 1""
 {x}
 Hello {""world""} 2.
 ");
-            Assert.AreEqual("Hello world 1\nHello world 2.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Hello world 1\nHello world 2.\n"));
         }
 
         [Test()]
@@ -112,7 +112,7 @@ Hello
 ->->
 ");
 
-            Assert.AreEqual("Hello world\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Hello world\n"));
         }
 
         [Test()]
@@ -152,8 +152,8 @@ Hello
 {|}
 ->->".Replace("\r", ""));
 
-            Assert.AreEqual(
-@"1. a
+            Assert.That(
+story.ContinueMaximally().Replace("\r", ""), Is.EqualTo(@"1. a
 2.
 3. b
 4. b
@@ -169,7 +169,7 @@ Hello
 1.
 2.
 3.
-".Replace("\r", ""), story.ContinueMaximally().Replace("\r", ""));
+".Replace("\r", "")));
         }
 
         [Test()]
@@ -229,7 +229,7 @@ Shuffle once: {f_shuffle_once()} {f_shuffle_once()} {f_shuffle_once()} {f_shuffl
                 ";
 
             Story story = CompileString(storyStr);
-            Assert.AreEqual("Once: one two\nStopping: one two two two\nDefault: one two two two\nCycle: one two one two\nShuffle: two one two one\nShuffle stopping: one two final final\nShuffle once: two one\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Once: one two\nStopping: one two two two\nDefault: one two two two\nCycle: one two one two\nShuffle: two one two one\nShuffle stopping: one two final final\nShuffle once: two one\n"));
         }
 
 
@@ -252,7 +252,7 @@ Shuffle once: {f_shuffle_once()} {f_shuffle_once()} {f_shuffle_once()} {f_shuffl
                 ";
 
             Story story = CompileString(storyStr);
-            Assert.AreEqual("8\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("8\n"));
         }
 
         [Test()]
@@ -270,7 +270,7 @@ Shuffle once: {f_shuffle_once()} {f_shuffle_once()} {f_shuffle_once()} {f_shuffl
 * two -> end
 ");
 
-            Assert.AreEqual("2\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("2\n"));
         }
 
         [Test()]
@@ -280,10 +280,10 @@ Shuffle once: {f_shuffle_once()} {f_shuffle_once()} {f_shuffle_once()} {f_shuffl
 
             story.Continue();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("choice", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("choice"));
         }
 
         [Test()]
@@ -294,12 +294,12 @@ Shuffle once: {f_shuffle_once()} {f_shuffle_once()} {f_shuffle_once()} {f_shuffl
             Story story = CompileString(storyStr);
             story.Continue();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("Option", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("Option"));
 
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("Text\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Text\n"));
         }
 
         [Test()]
@@ -319,7 +319,7 @@ C C C
 
             var expected = "A\nA  A\n\nA * A * / A\n\n\n";
 
-            Assert.AreEqual(expected.Replace("\r", ""), result.Replace("\r", "")); //Windows perculiarity
+            Assert.That(result.Replace("\r", ""), Is.EqualTo(expected.Replace("\r", ""))); //Windows perculiarity
         }
 
         //------------------------------------------------------------------------
@@ -335,7 +335,7 @@ C C C
             var expected =
                 "A B\nC D \nA B\nC D \n\n\n ";
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test()]
@@ -362,7 +362,7 @@ VAR to_two = -> two
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("different knot\nsame knot\nsame knot\ndifferent knot\nsame knot\nsame knot\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("different knot\nsame knot\nsame knot\ndifferent knot\nsame knot\nsame knot\n"));
         }
 
         [Test()]
@@ -386,7 +386,7 @@ two ({num})
 ->->
 ");
 
-            Assert.AreEqual("one (1)\none and a half (1"+ System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator+"5)\ntwo (2)\nthree (3)\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("one (1)\none and a half (1" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "5)\ntwo (2)\nthree (3)\n"));
         }
 
         [Test()]
@@ -408,12 +408,12 @@ two ({num})
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("start\ngather should be seen\n", story.ContinueMaximally());
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("start\ngather should be seen\n"));
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
 
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("result\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("result\n"));
         }
 
         [Test()]
@@ -432,14 +432,14 @@ two ({num})
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("first gather\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("first gather\n"));
 
-            Assert.AreEqual(2, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
 
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("the main gather\nbottom gather\n", story.ContinueMaximally());
-            Assert.AreEqual(0, story.currentChoices.Count);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("the main gather\nbottom gather\n"));
+            Assert.That(story.currentChoices, Is.Empty);
         }
 
         [Test()]
@@ -462,11 +462,11 @@ two ({num})
             Story story = CompileString(storyStr);
             story.ContinueMaximally();
 
-            Assert.AreEqual(4, story.currentChoices.Count);
-            Assert.AreEqual("one", story.currentChoices[0].text);
-            Assert.AreEqual("two", story.currentChoices[1].text);
-            Assert.AreEqual("three", story.currentChoices[2].text);
-            Assert.AreEqual("four", story.currentChoices[3].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(4));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("one"));
+            Assert.That(story.currentChoices[1].text, Is.EqualTo("two"));
+            Assert.That(story.currentChoices[2].text, Is.EqualTo("three"));
+            Assert.That(story.currentChoices[3].text, Is.EqualTo("four"));
         }
 
         [Test()]
@@ -504,7 +504,7 @@ two ({num})
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("true\ntrue\ntrue\ntrue\ntrue\ngreat\nright?\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("true\ntrue\ntrue\ntrue\ntrue\ngreat\nright?\n"));
         }
 
         [Test()]
@@ -517,7 +517,7 @@ CONST c = 5
 
 {x}
 ");
-            Assert.AreEqual("5\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("5\n"));
         }
 
         [Test()]
@@ -537,16 +537,16 @@ This is default.
 -> DONE
 ");
 
-            Assert.AreEqual("", story.Continue());
-            Assert.AreEqual(2, story.currentChoices.Count);
+            Assert.That(story.Continue(), Is.Empty);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("After choice\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("After choice\n"));
 
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("After choice\nThis is default.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("After choice\nThis is default.\n"));
         }
 
         [Test()]
@@ -557,7 +557,7 @@ This is default.
 - x
 -> DONE");
 
-            Assert.AreEqual("x\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("x\n"));
         }
 
         [Test()]
@@ -576,7 +576,7 @@ This is default.
                 ";
 
             Story story = CompileString(storyStr);
-            Assert.AreEqual("", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.Empty);
         }
 
         [Test()]
@@ -590,7 +590,7 @@ Knot.
 -> next
 ", testingErrors: true);
 
-            Assert.IsTrue(HadError("not found"));
+            Assert.That(HadError("not found"), Is.True);
         }
 
         [Test()]
@@ -618,7 +618,7 @@ Knot.
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("gather\ntest\nchoice content\ngather\nsecond time round\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("gather\ntest\nchoice content\ngather\nsecond time round\n"));
         }
 
         public void TestElseBranches()
@@ -653,7 +653,7 @@ VAR x = 3
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("other\nother\nother\nother\n", story.currentText);
+            Assert.That(story.currentText, Is.EqualTo("other\nother\nother\nother\n"));
         }
 
         [Test()]
@@ -661,7 +661,7 @@ VAR x = 3
         {
             Story story = CompileString(@"");
 
-            Assert.AreEqual(string.Empty, story.currentText);
+            Assert.That(story.currentText, Is.Empty);
         }
 
         [Test()]
@@ -673,7 +673,7 @@ VAR x = 3
                 if (errorType == ErrorType.Warning)
                 {
                     warningCount++;
-                    Assert.IsTrue(message.Contains("completely empty"));
+                    Assert.That(message.Contains("completely empty"), Is.True);
                 }
                 else
                 {
@@ -683,7 +683,7 @@ VAR x = 3
 
             parser.Parse();
 
-            Assert.AreEqual(1, warningCount);
+            Assert.That(warningCount, Is.EqualTo(1));
         }
 
         [Test()]
@@ -697,7 +697,7 @@ VAR x = 3
 }
 ");
 
-            Assert.AreEqual("", story.Continue());
+            Assert.That(story.Continue(), Is.Empty);
         }
 
 
@@ -713,7 +713,7 @@ VAR x = 3
 
             story.Continue ();
 
-        	Assert.IsTrue (story.state.evaluationStack.Count == 0);
+            Assert.That(story.state.evaluationStack.Count == 0, Is.True);
         }
 
         [Test ()]
@@ -749,7 +749,7 @@ Done.
 }
 ->->
 ");
-            Assert.AreEqual("Wait for it....\nSurprise!\nDone.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Wait for it....\nSurprise!\nDone.\n"));
         }
 
         [Test()]
@@ -762,7 +762,7 @@ world
 -> END
 ");
 
-            Assert.AreEqual("hello\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("hello\n"));
         }
 
         [Test()]
@@ -778,7 +778,7 @@ world
 -> END
 ");
 
-            Assert.AreEqual("hello\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("hello\n"));
         }
 
         [Test()]
@@ -786,7 +786,7 @@ world
         {
             Story story = CompileString("Hello world", false, true);
             story.ContinueMaximally();
-            Assert.IsFalse(HadError());
+            Assert.That(HadError(), Is.False);
 
             story = CompileString("== test ==\nContent\n-> END");
             story.ContinueMaximally();
@@ -795,18 +795,18 @@ world
             // (needs a -> END)
             story = CompileString("== test ==\nContent", false, true);
             story.ContinueMaximally();
-            Assert.IsTrue(HadWarning());
+            Assert.That(HadWarning(), Is.True);
 
             // Should have warning that there's no "-> END"
             CompileStringWithoutRuntime("== test ==\nContent", true);
-            Assert.IsFalse(HadError());
-            Assert.IsTrue(HadWarning());
+            Assert.That(HadError(), Is.False);
+            Assert.That(HadWarning(), Is.True);
 
             CompileStringWithoutRuntime("== test ==\n~return", testingErrors: true);
-            Assert.IsTrue(HadError("Return statements can only be used in knots that are declared as functions"));
+            Assert.That(HadError("Return statements can only be used in knots that are declared as functions"), Is.True);
 
             CompileStringWithoutRuntime("== function test ==\n-> END", testingErrors: true);
-            Assert.IsTrue(HadError("Functions may not contain diverts"));
+            Assert.That(HadError("Functions may not contain diverts"), Is.True);
         }
 
         [Test()]
@@ -816,7 +816,7 @@ world
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("this is a '|' character\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("this is a '|' character\n"));
         }
 
         [Test()]
@@ -852,11 +852,11 @@ EXTERNAL times(i,str)
                 return result;
             });
 
-            Assert.AreEqual("15\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("15\n"));
 
-            Assert.AreEqual("knock knock knock\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("knock knock knock\n"));
 
-            Assert.AreEqual("MESSAGE: hello world", message);
+            Assert.That(message, Is.EqualTo("MESSAGE: hello world"));
         }
 
         [Test()]
@@ -876,7 +876,7 @@ Two
             story.BindExternalFunction("myAction", () => callCount++, lookaheadSafe:true);
 
             story.ContinueMaximally();
-            Assert.AreEqual(2, callCount);
+            Assert.That(callCount, Is.EqualTo(2));
 
             // Lookahead UNSAFE - when it sees the function, it should break out early
             // and stop lookahead, making sure that the action is only called for the second line.
@@ -886,7 +886,7 @@ Two
             story.BindExternalFunction("myAction", () => callCount++, lookaheadSafe:false);
 
             story.ContinueMaximally();
-            Assert.AreEqual(1, callCount);
+            Assert.That(callCount, Is.EqualTo(1));
 
             // Lookahead SAFE but breaks glue intentionally
             var storyWithPostGlue = CompileString(@"
@@ -899,7 +899,7 @@ One
 
             storyWithPostGlue.BindExternalFunction("myAction", () => {});
             var result = storyWithPostGlue.ContinueMaximally();
-            Assert.AreEqual("One\nTwo\n", result);
+            Assert.That(result, Is.EqualTo("One\nTwo\n"));
         }
 
         [Test()]
@@ -923,7 +923,7 @@ VAR result = 0
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("120\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("120\n"));
         }
 
         [Test()]
@@ -942,7 +942,7 @@ VAR result = 0
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("120\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("120\n"));
         }
 
         [Test()]
@@ -967,9 +967,9 @@ This is a normal knot.
 -> END
 ", testingErrors: true);
 
-            Assert.AreEqual(2, _errorMessages.Count);
-            Assert.IsTrue(_errorMessages[0].Contains("hasn't been marked as a function"));
-            Assert.IsTrue(_errorMessages[1].Contains("can only be called as a function"));
+            Assert.That(_errorMessages.Count, Is.EqualTo(2));
+            Assert.That(_errorMessages[0].Contains("hasn't been marked as a function"), Is.True);
+            Assert.That(_errorMessages[1].Contains("can only be called as a function"), Is.True);
         }
 
         [Test()]
@@ -995,14 +995,14 @@ Hello world
 ~ return
 ", testingErrors: true);
 
-            Assert.AreEqual(7, _errorMessages.Count);
-            Assert.IsTrue(_errorMessages[0].Contains("Return statements can only be used in knots that"));
-            Assert.IsTrue(_errorMessages[1].Contains("Functions cannot be stitches"));
-            Assert.IsTrue(_errorMessages[2].Contains("Functions may not contain stitches"));
-            Assert.IsTrue(_errorMessages[3].Contains("Functions may not contain diverts"));
-            Assert.IsTrue(_errorMessages[4].Contains("Functions may not contain choices"));
-            Assert.IsTrue(_errorMessages[5].Contains("Functions may not contain choices"));
-            Assert.IsTrue(_errorMessages[6].Contains("Return statements can only be used in knots that"));
+            Assert.That(_errorMessages.Count, Is.EqualTo(7));
+            Assert.That(_errorMessages[0].Contains("Return statements can only be used in knots that"), Is.True);
+            Assert.That(_errorMessages[1].Contains("Functions cannot be stitches"), Is.True);
+            Assert.That(_errorMessages[2].Contains("Functions may not contain stitches"), Is.True);
+            Assert.That(_errorMessages[3].Contains("Functions may not contain diverts"), Is.True);
+            Assert.That(_errorMessages[4].Contains("Functions may not contain choices"), Is.True);
+            Assert.That(_errorMessages[5].Contains("Functions may not contain choices"), Is.True);
+            Assert.That(_errorMessages[6].Contains("Return statements can only be used in knots that"), Is.True);
         }
 
         [Test()]
@@ -1010,7 +1010,7 @@ Hello world
         {
             CompileStringWithoutRuntime ("->", testingErrors: true);
 
-            Assert.IsTrue (HadError ("Empty diverts (->) are only valid on choices"));
+            Assert.That(HadError("Empty diverts (->) are only valid on choices"), Is.True);
         }
 
         [Test()]
@@ -1021,12 +1021,12 @@ Hello world
             Story story = CompileString(storyStr);
             story.Continue();
 
-            Assert.AreEqual("hello", story.currentChoices[0].text);
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("hello"));
 
             story.ChooseChoiceIndex(0);
             story.Continue();
 
-            Assert.AreEqual("world", story.currentChoices[0].text);
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("world"));
         }
 
         [Test()]
@@ -1039,7 +1039,7 @@ Hello world
 { -> opts |}
 ");
 
-            Assert.AreEqual("seen test\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("seen test\n"));
         }
 
         [Test()]
@@ -1057,15 +1057,15 @@ Hello world
             Story story = CompileString(storyStr);
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("visible choice", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("visible choice"));
         }
 
         [Test()]
         public void TestHelloWorld()
         {
             Story story = CompileString("Hello world");
-            Assert.AreEqual("Hello world\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Hello world\n"));
         }
 
         [Test()]
@@ -1081,7 +1081,7 @@ Hello world
 -> DONE
 ");
 
-            Assert.AreEqual("512x2 = 1024\n512x2p2 = 1026\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("512x2 = 1024\n512x2p2 = 1026\n"));
         }
 
         [Test()]
@@ -1097,7 +1097,7 @@ I have {five()} eggs.
 five
 ");
 
-            Assert.AreEqual("I have five eggs.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("I have five eggs.\n"));
         }
 
         [Test ()]
@@ -1113,7 +1113,7 @@ X
 }
 ");
 
-            Assert.AreEqual ("A\nX\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("A\nX\n"));
         }
 
         [Test ()]
@@ -1130,7 +1130,7 @@ C
 }
 ");
 
-            Assert.AreEqual ("A\nC\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("A\nC\n"));
         }
 
         [Test()]
@@ -1145,7 +1145,7 @@ This is the main file.
                 ";
 
             Story story = CompileString(storyStr);
-            Assert.AreEqual("This is include 1.\nThis is include 2.\nThis is the main file.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("This is include 1.\nThis is include 2.\nThis is the main file.\n"));
         }
 
         [Test()]
@@ -1160,7 +1160,7 @@ VAR x = 5
 {x}
 ");
 
-            Assert.AreEqual("6\n5\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("6\n5\n"));
         }
 
         [Test()]
@@ -1173,7 +1173,7 @@ VAR x = 5
 - (gather) g
 -> DONE");
 
-            Assert.AreEqual("g\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("g\n"));
         }
 
         // Although VAR and CONST declarations are parsed as being
@@ -1190,7 +1190,7 @@ VAR X = 1
 CONST Y = 2
 ", testingErrors: true);
 
-            Assert.IsTrue(_warningMessages.Count == 0);
+            Assert.That(_warningMessages.Count == 0, Is.True);
         }
 
 
@@ -1223,11 +1223,11 @@ Loose end when there's no weave
 }
         ", testingErrors: true);
 
-            Assert.IsTrue (_warningMessages.Count == 3);
-            Assert.IsTrue (HadWarning ("line 4: Apparent loose end"));
-            Assert.IsTrue (HadWarning ("line 6: Apparent loose end"));
-            Assert.IsTrue (HadWarning ("line 14: Apparent loose end"));
-            Assert.IsTrue (_authorMessages.Count == 1);
+            Assert.That(_warningMessages.Count == 3, Is.True);
+            Assert.That(HadWarning("line 4: Apparent loose end"), Is.True);
+            Assert.That(HadWarning("line 6: Apparent loose end"), Is.True);
+            Assert.That(HadWarning("line 14: Apparent loose end"), Is.True);
+            Assert.That(_authorMessages.Count == 1, Is.True);
         }
 
         [Test()]
@@ -1252,15 +1252,15 @@ Loose end when there's no weave
         -> DONE
 ");
 
-            Assert.AreEqual("blah blah\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("blah blah\n"));
 
-            Assert.AreEqual(2, story.currentChoices.Count);
-            Assert.IsTrue(story.currentChoices[0].text.Contains("option"));
-            Assert.IsTrue(story.currentChoices[1].text.Contains("wigwag"));
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
+            Assert.That(story.currentChoices[0].text.Contains("option"), Is.True);
+            Assert.That(story.currentChoices[1].text.Contains("wigwag"), Is.True);
 
             story.ChooseChoiceIndex(1);
-            Assert.AreEqual("wigwag\n", story.Continue());
-            Assert.AreEqual("THE END\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("wigwag\n"));
+            Assert.That(story.Continue(), Is.EqualTo("THE END\n"));
         }
 
         [Test()]
@@ -1285,12 +1285,12 @@ Loose end when there's no weave
 
 ");
 
-            Assert.AreEqual("I’m in a tunnel\nWhen should this get printed?\n", story.ContinueMaximally());
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual(story.currentChoices[0].text, "I’m an option");
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("I’m in a tunnel\nWhen should this get printed?\n"));
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("I’m an option"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("I’m an option\nFinishing thread.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("I’m an option\nFinishing thread.\n"));
         }
 
         [Test()]
@@ -1304,7 +1304,7 @@ Loose end when there's no weave
 }
 ");
 
-            Assert.AreEqual("a line after an empty line\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("a line after an empty line\n"));
         }
 
         [Test()]
@@ -1319,7 +1319,7 @@ VAR negativeLiteral3 = !(0)
 {negativeLiteral2}
 {negativeLiteral3}
 ");
-            Assert.AreEqual("-1\nfalse\ntrue\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("-1\nfalse\ntrue\n"));
         }
 
         [Test()]
@@ -1335,10 +1335,10 @@ Joe
 
             story.ContinueMaximally();
 
-            Assert.AreEqual("'Hello Joe, your name is Joe.'", story.currentChoices[0].text);
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("'Hello Joe, your name is Joe.'"));
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("'Hello Joe,' I said, knowing full well that his name was Joe.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("'Hello Joe,' I said, knowing full well that his name was Joe.\n"));
         }
 
         [Test()]
@@ -1350,7 +1350,7 @@ VAR varStr = CONST_STR
 {varStr == CONST_STR:success}
 ");
 
-            Assert.AreEqual("success\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("success\n"));
         }
 
         [Test()]
@@ -1378,10 +1378,10 @@ This is place 2.
 * choice in place 2
 - ->->
 ");
-            Assert.AreEqual("This is place 1.\nThis is place 2.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("This is place 1.\nThis is place 2.\n"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("choice in place 1\nThe end\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("choice in place 1\nThe end\n"));
         }
 
         [Test()]
@@ -1397,7 +1397,7 @@ This is the main file
                 ";
 
             Story story = CompileString(storyStr);
-            Assert.AreEqual("The value of a variable in test file 2 is 5.\nThis is the main file\nThe value when accessed from knot_in_2 is 5.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("The value of a variable in test file 2 is 5.\nThis is the main file\nThe value when accessed from knot_in_2 is 5.\n"));
         }
 
         [Test()]
@@ -1424,7 +1424,7 @@ VAR globalVal = 5
             Story story = CompileString(storyStr);
 
             // Bloody whitespace
-            Assert.AreEqual("5\n625\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("5\n625\n"));
         }
 
         [Test()]
@@ -1446,7 +1446,7 @@ VAR globalVal = 5
             story.Continue();
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("option text. Conditional bit. Next.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("option text. Conditional bit. Next.\n"));
         }
 
         [Test()]
@@ -1465,19 +1465,19 @@ VAR globalVal = 5
 
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("First choice", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("First choice"));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("Second choice", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("Second choice"));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
 
-            Assert.AreEqual(null, story.currentErrors);
+            Assert.That(story.currentErrors, Is.Null);
         }
 
         [Test()]
@@ -1504,22 +1504,22 @@ This is the {first|second|third} time.
 
             story.ContinueMaximally();
 
-            Assert.AreEqual(3, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(3));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
 
-            Assert.AreEqual(2, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
 
-            Assert.AreEqual(0, story.currentChoices.Count);
+            Assert.That(story.currentChoices, Is.Empty);
         }
 
         [Test()]
@@ -1532,11 +1532,11 @@ This is the {first|second|third} time.
             var path3 = new Path(".hello.1.world");
             var path4 = new Path(".hello.1.world");
 
-            Assert.AreEqual(path1, path2);
+            Assert.That(path2, Is.EqualTo(path1));
 
-            Assert.AreEqual(path3, path4);
+            Assert.That(path4, Is.EqualTo(path3));
 
-            Assert.AreNotEqual(path1, path3);
+            Assert.That(path3, Is.Not.EqualTo(path1));
         }
 
         [Test()]
@@ -1625,14 +1625,14 @@ This is the {first|second|third} time.
 }
 ");
 
-            Assert.AreEqual(
-@". four .
+            Assert.That(
+story.ContinueMaximally().Replace("\r", ""), Is.EqualTo(@". four .
 . fifteen .
 . thirty-seven .
 . one hundred and one .
 . two hundred and twenty-two .
 . one thousand two hundred and thirty-four .
-".Replace("\r", ""), story.ContinueMaximally().Replace("\r", ""));
+".Replace("\r", "")));
         }
 
         [Test()]
@@ -1644,7 +1644,7 @@ This is the {first|second|third} time.
             //  - Inner quotes are significant - they're part of the syntax for string expressions
             // So output is: My name is "Joe"
             var story = CompileString(@"My name is ""{""J{""o""}e""}""");
-            Assert.AreEqual("My name is \"Joe\"\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("My name is \"Joe\"\n"));
         }
 
         [Test()]
@@ -1663,7 +1663,7 @@ This is the {first|second|third} time.
 In second.
 ->->
 ");
-            Assert.AreEqual("1) Seen first 1 times.\nIn second.\n2) Seen first 1 times.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1) Seen first 1 times.\nIn second.\n2) Seen first 1 times.\n"));
         }
 
         [Test()]
@@ -1682,7 +1682,7 @@ In second.
     * {false} DONE
 	- -> DONE
 ");
-            Assert.AreEqual("1\n1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\n1\n"));
         }
 
         [Test()]
@@ -1701,7 +1701,7 @@ hi
 ->->
 ");
 
-            Assert.AreEqual("hi\nhi\nhi\n3\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("hi\nhi\nhi\n3\n"));
         }
 
         [Test()]
@@ -1717,7 +1717,7 @@ hi
 == elsewhere ==
 ->->
 ", testingErrors: true);
-            Assert.IsTrue(HadError("it should be marked as: ->"));
+            Assert.That(HadError("it should be marked as: ->"), Is.True);
         }
 
         [Test()]
@@ -1749,7 +1749,7 @@ as fast as we could.
 -> DONE
 ");
 
-            Assert.AreEqual("We hurried home to Savile Row as fast as we could.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("We hurried home to Savile Row as fast as we could.\n"));
         }
 
         [Test()]
@@ -1766,7 +1766,7 @@ as fast as we could.
             story.ChooseChoiceIndex(0);
 
             // Shouldn't go to "gather"
-            Assert.AreEqual("opt\ntext\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("opt\ntext\n"));
         }
 
         [Test()]
@@ -1790,7 +1790,7 @@ as fast as we could.
 
             story.Continue ();
 
-            Assert.AreEqual (2, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
         }
 
         [Test()]
@@ -1800,7 +1800,7 @@ as fast as we could.
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("Some content with glue.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Some content with glue.\n"));
         }
 
         [Test()]
@@ -1817,11 +1817,11 @@ Second line.
 ");
 
             story.ContinueMaximally();
-            Assert.AreEqual(2, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
-            Assert.AreEqual(2, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
         }
 
         [Test()]
@@ -1833,7 +1833,7 @@ VAR x = kX
 CONST kX = ""hi""
 ");
 
-            Assert.AreEqual("hi\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("hi\n"));
         }
 
         [Test()]
@@ -1845,7 +1845,7 @@ CONST kX = ""hi""
                 () => p.ParseString("B"));
 
             var expected = new[] { "A" };
-            Assert.AreEqual(expected, results);
+            Assert.That(results, Is.EqualTo(expected));
         }
 
         [Test()]
@@ -1857,7 +1857,7 @@ CONST kX = ""hi""
                 () => p.ParseString("B"));
 
             var expected = new[] { "A", "B", "A", "B" };
-            Assert.AreEqual(expected, results);
+            Assert.That(results, Is.EqualTo(expected));
         }
 
         [Test()]
@@ -1869,7 +1869,7 @@ CONST kX = ""hi""
                 p.Optional(() => p.ParseString("B")));
 
             var expected = new[] { "A", "B", "A", "A" };
-            Assert.AreEqual(expected, results);
+            Assert.That(results, Is.EqualTo(expected));
         }
 
         [Test()]
@@ -1881,7 +1881,7 @@ CONST kX = ""hi""
                 () => p.ParseString("B"));
 
             var expected = new[] { "B", "A", "B", "B" };
-            Assert.AreEqual(expected, results);
+            Assert.That(results, Is.EqualTo(expected));
         }
 
         [Test()]
@@ -1892,7 +1892,7 @@ CONST kX = ""hi""
                 () => p.ParseString("A"),
                 () => p.ParseString("B"));
 
-            Assert.IsNull(result);
+            Assert.That(result, Is.Null);
         }
 
         [Test()]
@@ -1904,11 +1904,11 @@ CONST kX = ""hi""
 ");
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual(@"test1 ""test2 test3""", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo(@"test1 ""test2 test3"""));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("test1 test4\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("test1 test4\n"));
         }
 
         [Test()]
@@ -1920,7 +1920,7 @@ CONST kX = ""hi""
 ");
 
             // Not sure that "5" should be equal to 5, but hmm.
-            Assert.AreEqual("same\ndifferent\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("same\ndifferent\n"));
         }
 
         [Test()]
@@ -1931,7 +1931,7 @@ VAR x = 5
 ~ temp y = 4
 {x}{y}
 ");
-            Assert.AreEqual("54\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("54\n"));
         }
 
         [Test()]
@@ -1949,7 +1949,7 @@ World.
 -> DONE
 ");
 
-            Assert.AreEqual("This is a thread example\nHello.\nThe example is now complete.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("This is a thread example\nHello.\nThe example is now complete.\n"));
         }
 
         [Test()]
@@ -1969,7 +1969,7 @@ Hello...
 ->->
 ");
 
-            Assert.AreEqual("Hello...\n...world.\nThe End.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Hello...\n...world.\nThe End.\n"));
         }
 
         [Test()]
@@ -1997,20 +1997,20 @@ Done.
 - -> DONE
 ");
 
-            Assert.IsFalse(story.ContinueMaximally().Contains("Finished tunnel"));
+            Assert.That(story.ContinueMaximally().Contains("Finished tunnel"), Is.False);
 
             // Choices should be A, B
-            Assert.AreEqual(2, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
 
             story.ChooseChoiceIndex(0);
 
             // Choices should be C, D, E
-            Assert.IsTrue(story.ContinueMaximally().Contains("Finished tunnel"));
-            Assert.AreEqual(3, story.currentChoices.Count);
+            Assert.That(story.ContinueMaximally().Contains("Finished tunnel"), Is.True);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(3));
 
             story.ChooseChoiceIndex(2);
 
-            Assert.IsTrue(story.ContinueMaximally().Contains("Done."));
+            Assert.That(story.ContinueMaximally().Contains("Done."), Is.True);
         }
 
         [Test()]
@@ -2028,13 +2028,13 @@ Done.
 == function test ==
 ~ return
 ");
-            Assert.AreEqual("-1\n0\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("-1\n0\n"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\n"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("2\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("2\n"));
         }
 
         [Test()]
@@ -2050,17 +2050,17 @@ Done.
             {TURNS_SINCE(-> then)} = 1
         -> DONE
 ");
-            Assert.AreEqual("-1 = -1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("-1 = -1\n"));
 
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("stuff\n0 = 0\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("stuff\n0 = 0\n"));
 
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual("more stuff\n1 = 1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("more stuff\n1 = 1\n"));
         }
 
         [Test()]
@@ -2082,10 +2082,10 @@ Done.
     ~ return TURNS_SINCE(x)
 ", countAllVisits: true);
 
-            Assert.AreEqual("0\n0\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("0\n0\n"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\n"));
         }
 
         [Test()]
@@ -2099,17 +2099,17 @@ Done.
 ");
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("First", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("First"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("First\n", story.ContinueMaximally());
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("Very indented", story.currentChoices[0].text);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("First\n"));
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("Very indented"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("Very indented\nEnd\n", story.ContinueMaximally());
-            Assert.AreEqual(0, story.currentChoices.Count);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Very indented\nEnd\n"));
+            Assert.That(story.currentChoices, Is.Empty);
         }
 
         [Test()]
@@ -2128,7 +2128,7 @@ VAR x = 0
 
             // Extra newline is because there's a choice object sandwiched there,
             // so it can't be absorbed :-/
-            Assert.AreEqual("5\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("5\n"));
         }
 
         [Test()]
@@ -2146,7 +2146,7 @@ VAR x = -> here
 Here.
 -> DONE
 ");
-            Assert.AreEqual("Here.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Here.\n"));
         }
 
         [Test()]
@@ -2175,25 +2175,25 @@ VAR x = 5
 ");
 
             // Initial state
-            Assert.AreEqual("5\n", story.ContinueMaximally());
-            Assert.AreEqual(5, story.variablesState["x"]);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("5\n"));
+            Assert.That(story.variablesState["x"], Is.EqualTo(5));
 
             story.variablesState["x"] = 10;
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("10\n", story.ContinueMaximally());
-            Assert.AreEqual(10, story.variablesState["x"]);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("10\n"));
+            Assert.That(story.variablesState["x"], Is.EqualTo(10));
 
             story.variablesState["x"] = 8.5f;
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("8"+ System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator+"5\n", story.ContinueMaximally());
-            Assert.AreEqual(8.5f, story.variablesState["x"]);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("8" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "5\n"));
+            Assert.That(story.variablesState["x"], Is.EqualTo(8.5f));
 
             story.variablesState["x"] = "a string";
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("a string\n", story.ContinueMaximally());
-            Assert.AreEqual("a string", story.variablesState["x"]);
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a string\n"));
+            Assert.That(story.variablesState["x"], Is.EqualTo("a string"));
 
-            Assert.AreEqual(null, story.variablesState["z"]);
+            Assert.That(story.variablesState["z"], Is.Null);
 
             // Not allowed arbitrary types
             Assert.Throws<Exception>(() =>
@@ -2235,15 +2235,15 @@ Hello world 2!
 
             story.ContinueMaximally();
 
-            Assert.AreEqual(15, currentVarValue);
-            Assert.AreEqual(1, observerCallCount);
-            Assert.AreEqual(1, story.currentChoices.Count);
+            Assert.That(currentVarValue, Is.EqualTo(15));
+            Assert.That(observerCallCount, Is.EqualTo(1));
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
 
             story.ChooseChoiceIndex(0);
             story.Continue();
 
-            Assert.AreEqual(25, currentVarValue);
-            Assert.AreEqual(2, observerCallCount);
+            Assert.That(currentVarValue, Is.EqualTo(25));
+            Assert.That(observerCallCount, Is.EqualTo(2));
         }
 
         [Test()]
@@ -2265,7 +2265,7 @@ VAR val = 5
     ~ x = x + 1
 ");
 
-            Assert.AreEqual("6\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("6\n"));
         }
 
         [Test()]
@@ -2286,7 +2286,7 @@ VAR val = 5
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("1 2\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1 2\n"));
         }
 
         [Test()]
@@ -2306,7 +2306,7 @@ VAR val = 5
     -> END
 ");
 
-            Assert.AreEqual("STUFF\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("STUFF\n"));
         }
 
         [Test()]
@@ -2327,18 +2327,18 @@ VAR val = 5
 
             story.ContinueMaximally();
 
-            Assert.AreEqual(2, story.currentChoices.Count);
-            Assert.AreEqual("one", story.currentChoices[0].text);
-            Assert.AreEqual("four", story.currentChoices[1].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(2));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("one"));
+            Assert.That(story.currentChoices[1].text, Is.EqualTo("four"));
 
             story.ChooseChoiceIndex(0);
             story.ContinueMaximally();
 
-            Assert.AreEqual(1, story.currentChoices.Count);
-            Assert.AreEqual("two", story.currentChoices[0].text);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("two"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("two\nthree\nsix\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("two\nthree\nsix\n"));
         }
 
         [Test()]
@@ -2355,10 +2355,10 @@ VAR val = 5
             Story story = CompileString(storyStr);
             story.Continue();
 
-            Assert.AreEqual("Hello.", story.currentChoices[0].text);
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("Hello."));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("Hello, world.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Hello, world.\n"));
         }
 
         [Test()]
@@ -2377,7 +2377,7 @@ VAR val = 5
 ";
 
             Story story = CompileString(storyStr);
-            Assert.AreEqual("Hello!\nWorld.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Hello!\nWorld.\n"));
         }
 
         [Test()]
@@ -2396,31 +2396,31 @@ this is the end
 
             Story story = CompileString(storyStr, countAllVisits:true);
 
-            Assert.AreEqual (0, story.state.VisitCountAtPathString ("TestKnot"));
-            Assert.AreEqual (0, story.state.VisitCountAtPathString ("TestKnot2"));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot"), Is.EqualTo(0));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot2"), Is.EqualTo(0));
 
             story.ChoosePathString ("TestKnot");
 
-            Assert.AreEqual (1, story.state.VisitCountAtPathString ("TestKnot"));
-            Assert.AreEqual (0, story.state.VisitCountAtPathString ("TestKnot2"));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot"), Is.EqualTo(1));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot2"), Is.EqualTo(0));
 
             story.Continue ();
 
-            Assert.AreEqual (1, story.state.VisitCountAtPathString ("TestKnot"));
-            Assert.AreEqual (0, story.state.VisitCountAtPathString ("TestKnot2"));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot"), Is.EqualTo(1));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot2"), Is.EqualTo(0));
 
             story.ChooseChoiceIndex (0);
 
-            Assert.AreEqual (1, story.state.VisitCountAtPathString ("TestKnot"));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot"), Is.EqualTo(1));
 
             // At this point, we have made the choice, but the divert *within* the choice
             // won't yet have been evaluated.
-            Assert.AreEqual (0, story.state.VisitCountAtPathString ("TestKnot2"));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot2"), Is.EqualTo(0));
 
             story.Continue ();
 
-            Assert.AreEqual (1, story.state.VisitCountAtPathString ("TestKnot"));
-            Assert.AreEqual (1, story.state.VisitCountAtPathString ("TestKnot2"));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot"), Is.EqualTo(1));
+            Assert.That(story.state.VisitCountAtPathString("TestKnot2"), Is.EqualTo(1));
         }
 
         // https://github.com/inkle/ink/issues/539
@@ -2435,10 +2435,10 @@ this is the end
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual("1\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("1\n"));
 
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("choice\n1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("choice\n1\n"));
         }
 
         [Test()]
@@ -2465,7 +2465,7 @@ this is the end
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual ("0\n", story.Continue ());
+            Assert.That(story.Continue(), Is.EqualTo("0\n"));
         }
 
         [Test()]
@@ -2487,7 +2487,7 @@ Content
 
             Story story = CompileString(storyStr);
 
-            Assert.AreEqual ("Content\n", story.Continue ());
+            Assert.That(story.Continue(), Is.EqualTo("Content\n"));
         }
 
         [Test ()]
@@ -2505,14 +2505,14 @@ Content
 
             Story story = CompileString (storyStr);
             story.Continue ();
-                 
-            Assert.AreEqual (1, story.currentChoices.Count);
-            Assert.AreEqual ("1", story.currentChoices[0].text);
+
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("1"));
             story.ChooseChoiceIndex (0);
 
-            Assert.AreEqual ("1\nEnd of choice\nthis another\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\nEnd of choice\nthis another\n"));
 
-            Assert.AreEqual (0, story.currentChoices.Count);
+            Assert.That(story.currentChoices, Is.Empty);
         }
 
 
@@ -2538,7 +2538,7 @@ Top level content
             var returnedDivertTarget = story.EvaluateFunction ("test");
 
             // Divert target should get returned as a string
-            Assert.AreEqual ("somewhere.here", returnedDivertTarget);
+            Assert.That(returnedDivertTarget, Is.EqualTo("somewhere.here"));
         }
 
         [Test ()]
@@ -2567,22 +2567,22 @@ x = {x}, y = {y}
 
             string textOutput;
             var funcResult = story.EvaluateFunction ("func1", out textOutput);
-            Assert.AreEqual ("This is a function\n", textOutput);
-            Assert.AreEqual (5, funcResult);
+            Assert.That(textOutput, Is.EqualTo("This is a function\n"));
+            Assert.That(funcResult, Is.EqualTo(5));
 
-            Assert.AreEqual ("One\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("One\n"));
 
             funcResult = story.EvaluateFunction ("func2", out textOutput);
-            Assert.AreEqual ("This is a function without a return value\n", textOutput);
-            Assert.AreEqual (null, funcResult);
+            Assert.That(textOutput, Is.EqualTo("This is a function without a return value\n"));
+            Assert.That(funcResult, Is.Null);
 
-            Assert.AreEqual ("Two\n", story.Continue ());
+            Assert.That(story.Continue(), Is.EqualTo("Two\n"));
 
             funcResult = story.EvaluateFunction ("add", out textOutput, 1, 2);
-            Assert.AreEqual ("x = 1, y = 2\n", textOutput);
-            Assert.AreEqual (3, funcResult);
+            Assert.That(textOutput, Is.EqualTo("x = 1, y = 2\n"));
+            Assert.That(funcResult, Is.EqualTo(3));
 
-            Assert.AreEqual ("Three\n", story.Continue ());
+            Assert.That(story.Continue(), Is.EqualTo("Three\n"));
         }
 
         [Test ()]
@@ -2616,13 +2616,13 @@ In tunnel.
 
             Story story = CompileString (storyStr);
 
-            Assert.AreEqual ("Start\n", story.Continue ());
-            Assert.AreEqual ("In tunnel.\n", story.Continue ());
+            Assert.That(story.Continue(), Is.EqualTo("Start\n"));
+            Assert.That(story.Continue(), Is.EqualTo("In tunnel.\n"));
 
             var funcResult = story.EvaluateFunction ("function_to_evaluate");
-            Assert.AreEqual ("RIGHT", funcResult);
+            Assert.That(funcResult, Is.EqualTo("RIGHT"));
 
-            Assert.AreEqual ("End\n", story.Continue ());
+            Assert.That(story.Continue(), Is.EqualTo("End\n"));
         }
 
         [Test ()]
@@ -2636,7 +2636,7 @@ This content is inaccessible.
 
             Story story = CompileString (storyStr);
 
-            Assert.AreEqual (string.Empty, story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.Empty);
         }
 
         [Test ()]
@@ -2658,7 +2658,7 @@ Should be able to get here!
 ";
             CompileStringWithoutRuntime (storyStr, testingErrors:true);
 
-            Assert.IsTrue (HadError ("it shouldn't be preceded by '->'"));
+            Assert.That(HadError("it shouldn't be preceded by '->'"), Is.True);
         }
 
         [Test ()]
@@ -2678,7 +2678,7 @@ A line.
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("A line.\nAnother line.\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("A line.\nAnother line.\n"));
         }
 
         [Test ()]
@@ -2691,7 +2691,7 @@ Hello {x}.
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("Hello world.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Hello world.\n"));
 
             Assert.Throws<StoryException>(() => {
                 story.variablesState ["y"] = "earth";
@@ -2723,10 +2723,10 @@ CONST z = -> elsewhere
 ";
             CompileStringWithoutRuntime (storyStr, testingErrors:true);
 
-            Assert.IsFalse (HadError ("'pi' has been redefined"));
-            Assert.IsTrue (HadError ("'x' has been redefined"));
-            Assert.IsTrue (HadError ("'y' has been redefined"));
-            Assert.IsTrue (HadError ("'z' has been redefined"));
+            Assert.That(HadError("'pi' has been redefined"), Is.False);
+            Assert.That(HadError("'x' has been redefined"), Is.True);
+            Assert.That(HadError("'y' has been redefined"), Is.True);
+            Assert.That(HadError("'z' has been redefined"), Is.True);
         }
 
         [Test ()]
@@ -2766,18 +2766,18 @@ Stitch content
             var stitchTags = new List<string> ();
             stitchTags.Add ("stitch tag");
 
-            Assert.AreEqual (globalTags, story.globalTags);
-            Assert.AreEqual ("This is the content\n", story.Continue ());
-            Assert.AreEqual (globalTags, story.currentTags);
+            Assert.That(story.globalTags, Is.EqualTo(globalTags));
+            Assert.That(story.Continue(), Is.EqualTo("This is the content\n"));
+            Assert.That(story.currentTags, Is.EqualTo(globalTags));
 
-            Assert.AreEqual (knotTags, story.TagsForContentAtPath ("knot"));
-            Assert.AreEqual (stitchTags, story.TagsForContentAtPath ("knot.stitch"));
+            Assert.That(story.TagsForContentAtPath("knot"), Is.EqualTo(knotTags));
+            Assert.That(story.TagsForContentAtPath("knot.stitch"), Is.EqualTo(stitchTags));
 
             story.ChoosePathString ("knot");
-            Assert.AreEqual ("Knot content\n", story.Continue ());
-            Assert.AreEqual (knotTags, story.currentTags);
-            Assert.AreEqual ("", story.Continue ());
-            Assert.AreEqual (knotTagWhenContinuedTwice, story.currentTags);
+            Assert.That(story.Continue(), Is.EqualTo("Knot content\n"));
+            Assert.That(story.currentTags, Is.EqualTo(knotTags));
+            Assert.That(story.Continue(), Is.Empty);
+            Assert.That(story.currentTags, Is.EqualTo(knotTagWhenContinuedTwice));
         }
 
         [Test ()]
@@ -2798,7 +2798,7 @@ Now in B.
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("This is A\nNow in B.\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("This is A\nNow in B.\n"));
         }
 
         [Test ()]
@@ -2816,7 +2816,7 @@ LIST list = a, (b), c, (d), e
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("b, d\na, b, c, e\nb, c\nfalse\ntrue\ntrue\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("b, d\na, b, c, e\nb, c\nfalse\ntrue\ntrue\n"));
         }
 
 
@@ -2831,7 +2831,7 @@ LIST list2 = x, (y), z
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("a, y, c\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a, y, c\n"));
         }
 
 
@@ -2856,7 +2856,7 @@ LIST list = l, m = 5, n
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("1\nl\nn\nl, m\nn\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\nl\nn\nl, m\nn\n"));
         }
 
         [Test ()]
@@ -2870,7 +2870,7 @@ LIST list = a, b
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("a, b\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a, b\n"));
         }
 
 
@@ -2886,7 +2886,7 @@ LIST list = (a), b
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("false\nfalse\nfalse\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("false\nfalse\nfalse\n"));
         }
 
 
@@ -2901,7 +2901,7 @@ LIST x = a, b, c
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("a, b, c\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a, b, c\n"));
         }
 
         [Test ()]
@@ -2923,7 +2923,7 @@ VAR t = ()
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("a, x, c\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a, x, c\n"));
 
             var savedState = story.state.ToJson ();
 
@@ -2934,14 +2934,14 @@ VAR t = ()
             story.state.LoadJson (savedState);
 
             story.ChoosePathString ("elsewhere");
-            Assert.AreEqual ("a, x, c, z\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a, x, c, z\n"));
         }
 
         [Test ()]
         public void TestEmptyThreadError ()
         {
             CompileStringWithoutRuntime ("<-", testingErrors:true);
-            Assert.IsTrue (HadError ("Expected target for new thread"));
+            Assert.That(HadError("Expected target for new thread"), Is.True);
         }
 
         [Test ()]
@@ -2955,7 +2955,7 @@ TODO: b
 }
 ";
             CompileString (storyStr, testingErrors:true);
-            Assert.IsFalse (HadError ());
+            Assert.That(HadError(), Is.False);
         }
 
         [Test ()]
@@ -2973,11 +2973,11 @@ TODO: b
 
             story.Continue ();
 
-            Assert.IsTrue (story.currentChoices.Count == 1);
+            Assert.That(story.currentChoices.Count == 1, Is.True);
 
             story.ChooseChoiceIndex (0);
 
-            Assert.AreEqual ("choice\nnextline\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("choice\nnextline\n"));
         }
 
 
@@ -2991,7 +2991,7 @@ TODO: b
 }
 ";
             CompileString(storyStr, testingErrors:true);
-            Assert.IsTrue(HadError("need to explicitly divert"));
+            Assert.That(HadError("need to explicitly divert"), Is.True);
         }
 
 
@@ -3008,7 +3008,7 @@ VAR stitch = 0
 ";
             CompileString (storyStr, countAllVisits: false, testingErrors: true);
 
-            Assert.IsTrue (HadError ("already been used for a var"));
+            Assert.That(HadError("already been used for a var"), Is.True);
         }
 
 
@@ -3025,7 +3025,7 @@ opts1
 ";
             CompileString (storyStr, countAllVisits: false, testingErrors:true);
 
-            Assert.IsTrue(HadError ("with the same label"));
+            Assert.That(HadError("with the same label"), Is.True);
         }
 
         [Test ()]
@@ -3043,7 +3043,7 @@ LIST someList = A, B
         ";
             CompileString (storyStr, countAllVisits: false, testingErrors: true);
 
-            Assert.IsTrue (HadError ("name has already been used for a function"));
+            Assert.That(HadError("name has already been used for a function"), Is.True);
         }
 
         [Test ()]
@@ -3055,7 +3055,7 @@ LIST someList = A, B
             
             CompileString (storyStr, countAllVisits: false, testingErrors: true);
 
-            Assert.IsTrue (HadError ("has already been used"));
+            Assert.That(HadError("has already been used"), Is.True);
         }
 
         [Test ()]
@@ -3075,7 +3075,7 @@ LIST someList = A, B
 
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("8\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("8\n"));
         }
 
         [Test ()]
@@ -3093,7 +3093,7 @@ Unreachable
 ";
 
             var story = CompileString (storyStr);
-            Assert.AreEqual ("1\n2\n3\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\n2\n3\n"));
         }
 
 
@@ -3106,7 +3106,7 @@ Unreachable
         ";
 
         	CompileString (storyStr, testingErrors:true);
-            Assert.IsTrue (HadWarning ("Blank choice"));
+            Assert.That(HadWarning("Blank choice"), Is.True);
         }
 
         [Test ()]
@@ -3125,7 +3125,7 @@ Unreachable
 ";
 
             var story = CompileString (storyStr);
-            Assert.AreEqual ("8\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("8\n"));
         }
 
 
@@ -3149,7 +3149,7 @@ This is the_esc
 ";
 
             var story = CompileString (storyStr);
-            Assert.AreEqual ("This is outer\nThis is the_esc\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("This is outer\nThis is the_esc\n"));
         }
 
 
@@ -3176,7 +3176,7 @@ Count end: {READ_COUNT (x)} {READ_COUNT (-> knot)} {knot}
 ";
 
             var story = CompileString (storyStr, countAllVisits:true);
-            Assert.AreEqual ("Count start: 0 0 0\n1\n2\n3\nCount end: 3 3 3\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Count start: 0 0 0\n1\n2\n3\nCount end: 3 3 3\n"));
         }
 
 
@@ -3196,7 +3196,7 @@ VAR x = ->place
 
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("5\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("5\n"));
         }
 
         [Test ()]
@@ -3211,11 +3211,11 @@ A {red #red|white #white|blue #blue|green #green} sequence.
 ";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("A red sequence.\n", story.Continue ());
-            Assert.AreEqual (new List<string> {"red"}, story.currentTags);
+            Assert.That(story.Continue(), Is.EqualTo("A red sequence.\n"));
+            Assert.That(story.currentTags, Is.EqualTo(new List<string> { "red" }));
 
-            Assert.AreEqual ("A white sequence.\n", story.Continue ());
-            Assert.AreEqual (new List<string> {"white"}, story.currentTags);
+            Assert.That(story.Continue(), Is.EqualTo("A white sequence.\n"));
+            Assert.That(story.currentTags, Is.EqualTo(new List<string> { "white" }));
         }
 
         [Test ()]
@@ -3225,14 +3225,14 @@ A {red #red|white #white|blue #blue|green #green} sequence.
             var story = CompileString (storyStr);
 
             story.Continue ();
-            Assert.AreEqual (0, story.currentTags.Count);
-            Assert.AreEqual (1, story.currentChoices.Count);
-            Assert.AreEqual (new List<string> {"one", "two"}, story.currentChoices[0].tags);
+            Assert.That(story.currentTags, Is.Empty);
+            Assert.That(story.currentChoices.Count, Is.EqualTo(1));
+            Assert.That(story.currentChoices[0].tags, Is.EqualTo(new List<string> { "one", "two" }));
 
             story.ChooseChoiceIndex(0);
 
-            Assert.AreEqual ("one three", story.Continue ());
-            Assert.AreEqual (new List<string> {"one", "three"}, story.currentTags);
+            Assert.That(story.Continue(), Is.EqualTo("one three"));
+            Assert.That(story.currentTags, Is.EqualTo(new List<string> { "one", "three" }));
         }
 
         [Test ()]
@@ -3241,8 +3241,8 @@ A {red #red|white #white|blue #blue|green #green} sequence.
             var storyStr = @"tag # pic{5+3}{red|blue}.jpg";
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("tag\n", story.Continue ());
-            Assert.AreEqual (new List<string> {"pic8red.jpg"}, story.currentTags);
+            Assert.That(story.Continue(), Is.EqualTo("tag\n"));
+            Assert.That(story.currentTags, Is.EqualTo(new List<string> { "pic8red.jpg" }));
         }
 
         [Test ()]
@@ -3260,7 +3260,7 @@ A {red #red|white #white|blue #blue|green #green} sequence.
 
         	var result = story.ContinueMaximally ();
 
-        	Assert.AreEqual ("true\nfalse\ntrue\ntrue\n", result);
+            Assert.That(result, Is.EqualTo("true\nfalse\ntrue\ntrue\n"));
         }
 
         [Test ()]
@@ -3293,8 +3293,8 @@ A {red #red|white #white|blue #blue|green #green} sequence.
 
         	var result = story.ContinueMaximally ();
 
-        	Assert.AreEqual ("else\nelse\nhi\n", result);
-            Assert.IsTrue (story.state.evaluationStack.Count == 0);
+            Assert.That(result, Is.EqualTo("else\nelse\nhi\n"));
+            Assert.That(story.state.evaluationStack.Count == 0, Is.True);
         }
 
         [Test ()]
@@ -3332,8 +3332,8 @@ In top external
             string strResult;
             var finalResult = (int) story.EvaluateFunction ("topExternal", out strResult, 5);
 
-            Assert.AreEqual (7, finalResult);
-            Assert.AreEqual ("In top external\n", strResult);
+            Assert.That(finalResult, Is.EqualTo(7));
+            Assert.That(strResult, Is.EqualTo("In top external\n"));
         }
 
 
@@ -3357,7 +3357,7 @@ B
 
         	var story = CompileString (storyStr);
 
-        	Assert.AreEqual ("A\nB\nA\n3\nB\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("A\nB\nA\n3\nB\n"));
         }
 
 
@@ -3382,7 +3382,7 @@ Phrase 1
         	var story = CompileString (storyStr);
             story.allowExternalFunctionFallbacks = true;
 
-        	Assert.AreEqual ("Phrase 1\nPhrase 2\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Phrase 1\nPhrase 2\n"));
         }
 
         [Test ()]
@@ -3403,7 +3403,7 @@ Phrase 1
 ";
         	var story = CompileString (storyStr);
 
-        	Assert.AreEqual ("a b\na b\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("a b\na b\n"));
         }
 
 
@@ -3423,7 +3423,7 @@ Phrase 1
         ";
         	var story = CompileString (storyStr);
 
-        	Assert.AreEqual ("X\nx\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("X\nx\n"));
         }
 
         [Test ()]
@@ -3437,9 +3437,9 @@ hello
                 ";
         	var story = CompileString (storyStr, testingErrors:true);
 
-        	Assert.AreEqual ("0\nhello\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("0\nhello\n"));
 
-        	Assert.IsTrue (HadWarning());
+            Assert.That(HadWarning(), Is.True);
         }
 
 
@@ -3461,8 +3461,8 @@ hello
             
         	CompileStringWithoutRuntime (storyStr, testingErrors:true);
 
-            Assert.IsTrue (HadError ("Unresolved variable: x"));
-            Assert.IsTrue (HadError ("Unresolved variable: y"));
+            Assert.That(HadError("Unresolved variable: x"), Is.True);
+            Assert.That(HadError("Unresolved variable: y"), Is.True);
         }
 
 
@@ -3482,8 +3482,8 @@ Limes
 
             var story = CompileString (storyStr);
 
-            Assert.AreEqual ("Limes\n", story.Continue ());
-            Assert.IsTrue (story.currentChoices.Count == 1);
+            Assert.That(story.Continue(), Is.EqualTo("Limes\n"));
+            Assert.That(story.currentChoices.Count == 1, Is.True);
         }
 
 
@@ -3498,7 +3498,7 @@ world
 -> END";
 
         	var story = CompileString (storyStr);
-        	Assert.AreEqual ("hello world\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("hello world\n"));
 
             storyStr =
 	@"
@@ -3510,7 +3510,7 @@ world
 
             story.Continue ();
             story.ChooseChoiceIndex (0);
-            Assert.AreEqual ("hello world\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("hello world\n"));
 
 
             storyStr =
@@ -3524,7 +3524,7 @@ world
 
             story.Continue ();
             story.ChooseChoiceIndex (0);
-            Assert.AreEqual ("hello\nworld\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("hello\nworld\n"));
         }
 
 
@@ -3550,7 +3550,7 @@ LIST l = A, (B), (C), (D), E
 
             while (story.canContinue) {
                 var result = story.Continue ();
-                Assert.IsTrue (result == "B\n" || result == "C\n" || result == "D\n");
+                Assert.That(result == "B\n" || result == "C\n" || result == "D\n", Is.True);
             }
         }
 
@@ -3570,7 +3570,7 @@ LIST l = A, (B), (C), (D), E
             var story = CompileString (storyStr);
 
             for (int i = 0; i < 10; i++) {
-                Assert.AreEqual(i + "\n", story.Continue ());
+                Assert.That(story.Continue(), Is.EqualTo(i + "\n"));
                 story.ChooseChoiceIndex (0);
             }
         }
@@ -3598,7 +3598,7 @@ text 2
 
             var story = CompileString (storyStr);
 
-            Assert.AreEqual("text1\ntext 2\ntext1\ntext 2\n", story.ContinueMaximally ());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("text1\ntext 2\ntext1\ntext 2\n"));
         }
 
         [Test()]
@@ -3616,7 +3616,7 @@ text 2
 
             var story = CompileString(storyStr);
 
-            Assert.AreEqual("1\n1\n2\n0.6666667\n0\n1\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("1\n1\n2\n0.6666667\n0\n1\n"));
         }
 
         [Test()]
@@ -3639,13 +3639,13 @@ VAR all = ()
 
             var story = CompileString(storyStr);
 
-            Assert.AreEqual(
-@"Pound, Pizza, Euro, Pasta, Dollar, Curry, Paella
+            Assert.That(
+story.ContinueMaximally(), Is.EqualTo(@"Pound, Pizza, Euro, Pasta, Dollar, Curry, Paella
 Euro, Pasta, Dollar, Curry
 Two, Three, Four, Five, Six
 One, Two, Three
 Pizza, Pasta
-".Replace(Environment.NewLine, "\n"), story.ContinueMaximally());
+".Replace(Environment.NewLine, "\n")));
         }
            
         // Fix for rogue "can't use as sub-expression" bug
@@ -3716,8 +3716,8 @@ VAR gatherCount = 0
             // Ensure it just compiles
             var story = CompileString(storyStr);
 
-            Assert.AreEqual(
-@"1 1
+            Assert.That(
+story.ContinueMaximally(), Is.EqualTo(@"1 1
 2 2
 3 3
 1 1
@@ -3732,7 +3732,7 @@ VAR gatherCount = 0
 1 2
 2 2
 3 2
-".Replace(Environment.NewLine, "\n"), story.ContinueMaximally());
+".Replace(Environment.NewLine, "\n")));
         }
 
         // Fix for threads being incorrectly reused between choices
@@ -3770,7 +3770,7 @@ VAR gatherCount = 0
 
             // Don't want this warning:
             // RUNTIME WARNING: '' line 7: Variable not found: 'x'
-            Assert.IsFalse(story.hasWarning);
+            Assert.That(story.hasWarning, Is.False);
         }
 
 
@@ -3789,7 +3789,7 @@ VAR gatherCount = 0
 ";
 
             var story = CompileString(storyStr);
-            Assert.AreEqual("Should be 1 not 0: 1.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Should be 1 not 0: 1.\n"));
         }
 
         // Test for bug where after a call to ChoosePathString,
@@ -3816,11 +3816,11 @@ The second line.
 
             var story = CompileString(storyStr);
 
-            Assert.AreEqual("The first line.\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("The first line.\n"));
 
             story.ChoosePathString("SomewhereElse");
 
-            Assert.AreEqual("somewhere else\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("somewhere else\n"));
         }
 
 
@@ -3846,8 +3846,8 @@ Text.
 
             var story = CompileString(storyStr);
 
-            Assert.AreEqual("Text.\n", story.Continue());
-            Assert.AreEqual("5\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Text.\n"));
+            Assert.That(story.Continue(), Is.EqualTo("5\n"));
         }
 
         // Bools used to be represented purely
@@ -3861,21 +3861,21 @@ Text.
         [Test()]
         public void TestBools()
         {
-            Assert.AreEqual("true\n", CompileString("{true}").Continue());
-            Assert.AreEqual("2\n", CompileString("{true + 1}").Continue());
-            Assert.AreEqual("3\n", CompileString("{2 + true}").Continue());
-            Assert.AreEqual("0\n", CompileString("{false + false}").Continue());
-            Assert.AreEqual("2\n", CompileString("{true + true}").Continue());
-            Assert.AreEqual("true\n", CompileString("{true == 1}").Continue());
-            Assert.AreEqual("false\n", CompileString("{not 1}").Continue());
-            Assert.AreEqual("false\n", CompileString("{not true}").Continue());
-            Assert.AreEqual("true\n", CompileString("{3 > 1}").Continue());
+            Assert.That(CompileString("{true}").Continue(), Is.EqualTo("true\n"));
+            Assert.That(CompileString("{true + 1}").Continue(), Is.EqualTo("2\n"));
+            Assert.That(CompileString("{2 + true}").Continue(), Is.EqualTo("3\n"));
+            Assert.That(CompileString("{false + false}").Continue(), Is.EqualTo("0\n"));
+            Assert.That(CompileString("{true + true}").Continue(), Is.EqualTo("2\n"));
+            Assert.That(CompileString("{true == 1}").Continue(), Is.EqualTo("true\n"));
+            Assert.That(CompileString("{not 1}").Continue(), Is.EqualTo("false\n"));
+            Assert.That(CompileString("{not true}").Continue(), Is.EqualTo("false\n"));
+            Assert.That(CompileString("{3 > 1}").Continue(), Is.EqualTo("true\n"));
 
             var listHasntStory = @"
                 LIST list = a, (b), c, (d), e
                 {list !? (c)}
             ";
-            Assert.AreEqual("true\n", CompileString(listHasntStory).Continue());
+            Assert.That(CompileString(listHasntStory).Continue(), Is.EqualTo("true\n"));
         }
 
 
@@ -3899,17 +3899,17 @@ knot 2 line 2
 
             story.SwitchFlow("First");
             story.ChoosePathString("knot1");
-            Assert.AreEqual("knot 1 line 1\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("knot 1 line 1\n"));
 
             story.SwitchFlow("Second");
             story.ChoosePathString("knot2");
-            Assert.AreEqual("knot 2 line 1\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("knot 2 line 1\n"));
 
             story.SwitchFlow("First");
-            Assert.AreEqual("knot 1 line 2\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("knot 1 line 2\n"));
 
             story.SwitchFlow("Second");
-            Assert.AreEqual("knot 2 line 2\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("knot 2 line 2\n"));
         }
 
         [Test()]
@@ -3950,58 +3950,58 @@ After thread 2 choice ({name})
 ";
 
             var story = CompileString(storyStr);
-            
+
             // Default flow
-            Assert.AreEqual("Default line 1\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Default line 1\n"));
 
             story.SwitchFlow("Blue Flow");
             story.ChoosePathString("blue");
-            Assert.AreEqual("Hello I'm blue\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Hello I'm blue\n"));
 
             story.SwitchFlow("Red Flow");
             story.ChoosePathString("red");
-            Assert.AreEqual("Hello I'm red\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Hello I'm red\n"));
 
             // Test existing state remains after switch (blue)
             story.SwitchFlow("Blue Flow");
-            Assert.AreEqual("Hello I'm blue\n", story.currentText);
-            Assert.AreEqual("Thread 1 blue choice", story.currentChoices[0].text);
+            Assert.That(story.currentText, Is.EqualTo("Hello I'm blue\n"));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("Thread 1 blue choice"));
 
             // Test existing state remains after switch (red)
             story.SwitchFlow("Red Flow");
-            Assert.AreEqual("Hello I'm red\n", story.currentText);
-            Assert.AreEqual("Thread 1 red choice", story.currentChoices[0].text);
+            Assert.That(story.currentText, Is.EqualTo("Hello I'm red\n"));
+            Assert.That(story.currentChoices[0].text, Is.EqualTo("Thread 1 red choice"));
 
             // Save/load test
             var saved = story.state.ToJson();
             
             // Test choice before reloading state before resetting
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("Thread 1 red choice\nAfter thread 1 choice (red)\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Thread 1 red choice\nAfter thread 1 choice (red)\n"));
             story.ResetState();
 
             // Load to pre-choice: still red, choose second choice
             story.state.LoadJson(saved);
 
             story.ChooseChoiceIndex(1);
-            Assert.AreEqual("Thread 2 red choice\nAfter thread 2 choice (red)\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Thread 2 red choice\nAfter thread 2 choice (red)\n"));
 
             
             // Load: switch to blue, choose 1
             story.state.LoadJson(saved);
             story.SwitchFlow("Blue Flow");
             story.ChooseChoiceIndex(0);
-            Assert.AreEqual("Thread 1 blue choice\nAfter thread 1 choice (blue)\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Thread 1 blue choice\nAfter thread 1 choice (blue)\n"));
 
             // Load: switch to blue, choose 2
             story.state.LoadJson(saved);
             story.SwitchFlow("Blue Flow");
             story.ChooseChoiceIndex(1);
-            Assert.AreEqual("Thread 2 blue choice\nAfter thread 2 choice (blue)\n", story.ContinueMaximally());
+            Assert.That(story.ContinueMaximally(), Is.EqualTo("Thread 2 blue choice\nAfter thread 2 choice (blue)\n"));
 
             // Remove active blue flow, should revert back to global flow
             story.RemoveFlow("Blue Flow");
-            Assert.AreEqual("Default line 2\n", story.Continue());
+            Assert.That(story.Continue(), Is.EqualTo("Default line 2\n"));
         }
 
         // Helper compile function
@@ -4018,7 +4018,7 @@ After thread 2 choice ({name})
 
             Story story = parsedStory.ExportRuntime(OnError);
             if ( !testingErrors )
-                Assert.AreNotEqual(null, story);
+                Assert.That(story, Is.Not.Null);
 
             if (story != null)
             {
@@ -4047,7 +4047,7 @@ After thread 2 choice ({name})
             var parsedStory = parser.Parse();
 
             if (!testingErrors) {
-                Assert.IsNotNull (parsedStory);
+                Assert.That(parsedStory, Is.Not.Null);
             }
 
             if (parsedStory && _errorMessages.Count == 0) {
@@ -4135,7 +4135,7 @@ CONST b{0} = 3
 
                 var compiledStory = CompileStringWithoutRuntime(storyStr);
 
-                Assert.IsNotNull(compiledStory);
+                Assert.That(compiledStory, Is.Not.Null);
             }
         }
         [Test()]
@@ -4157,7 +4157,7 @@ CONST {0}b = 3
 
                 var compiledStory = CompileStringWithoutRuntime(storyStr);
 
-                Assert.IsNotNull(compiledStory);
+                Assert.That(compiledStory, Is.Not.Null);
             }
         }
 
@@ -4180,7 +4180,7 @@ VAR b{0} = 3
 
                 var compiledStory = CompileStringWithoutRuntime(storyStr);
 
-                Assert.IsNotNull(compiledStory);
+                Assert.That(compiledStory, Is.Not.Null);
             }
         }
 
@@ -4203,7 +4203,7 @@ VAR {0}b = 3
 
                 var compiledStory = CompileStringWithoutRuntime(storyStr);
 
-                Assert.IsNotNull(compiledStory);
+                Assert.That(compiledStory, Is.Not.Null);
             }
         }
 
@@ -4227,7 +4227,7 @@ VAR z{0} = -> divert{0}
                 
                 var compiledStory = CompileStringWithoutRuntime (storyStr);
 
-                Assert.IsNotNull (compiledStory);
+                Assert.That(compiledStory, Is.Not.Null);
             }
         }
         [Test()]
@@ -4250,7 +4250,7 @@ VAR {0}z = -> {0}divert
 
                 var compiledStory = CompileStringWithoutRuntime(storyStr);
 
-                Assert.IsNotNull(compiledStory);
+                Assert.That(compiledStory, Is.Not.Null);
             }
         }
 

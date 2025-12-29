@@ -156,13 +156,13 @@ namespace Ink.Runtime
             Add (singleElement.Key, singleElement.Value);
 		}
 
-		/// <summary>
-		/// Converts a string to an ink list and returns for use in the story.
-		/// </summary>
-		/// <returns>InkList created from string list item</returns>
-		/// <param name="itemKey">Item key.</param>
-		/// <param name="originStory">Origin story.</param>
-		public static InkList FromString(string myListItem, Story originStory) {
+        /// <summary>
+        /// Converts a string to an ink list and returns for use in the story.
+        /// </summary>
+        /// <returns>InkList created from string list item</returns>
+        /// <param name="myListItem">Item key.</param>
+        /// <param name="originStory">Origin story.</param>
+        public static InkList FromString(string myListItem, Story originStory) {
             if (string.IsNullOrEmpty(myListItem))
                 return new InkList();
 			var listValue = originStory.listDefinitions.FindSingleItemListWithName (myListItem);
@@ -443,7 +443,7 @@ namespace Ink.Runtime
         /// <summary>
         /// Returns true if the current list contains an item matching the given name.
         /// </summary>
-        /// <param name="otherList">Other list.</param>
+        /// <param name="listItemName">Other list.</param>
         public bool Contains(string listItemName)
         {
             foreach (var kv in this)

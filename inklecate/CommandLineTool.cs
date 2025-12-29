@@ -202,7 +202,7 @@ namespace Ink
                         OnError (e.Message, ErrorType.Error);
                         PrintAllMessages ();
                     } else {
-                        throw e;
+                        throw;
                     }
                 } catch (System.Exception e) {
                     string storyPath = "<END>";
